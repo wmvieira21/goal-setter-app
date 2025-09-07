@@ -1,6 +1,5 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { StatusBar } from 'expo-status-bar';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import App from './app';
@@ -19,7 +18,6 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <App></App>
-      <StatusBar style="auto" />
     </ThemeProvider>
   );
 }
