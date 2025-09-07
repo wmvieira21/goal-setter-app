@@ -8,7 +8,7 @@ export default function App() {
     async function addGoalHandler() {
         if (enteredText.length > 0) {
             await setCourseGoals(currentGoals => {
-                return [...currentGoals, enteredText]
+                return [...currentGoals, { text: enteredText, id: Math.random().toString() }];
             });
             setEnteredText('');
         }
@@ -25,9 +25,9 @@ export default function App() {
                 <Button color={'#5e0accc4'} title="Add Goal" onPress={addGoalHandler}></Button>
             </View>
             <View style={styles.goalsContainer}>
-                <FlatList alwaysBounceVertical="false" data={courseGoals} renderItem={(itemData) => (
-                    <View key={itemData.index} style={styles.goalItem}>
-                        <Text style={styles.goalItemText}>{itemData.item}</Text>
+                <FlatList alwaysBounceVertical="false" keyExtractor={(item, index) => { return item.id }} data={courseGoals} renderItem={(itemData) => (
+                    <View style={styles.goalItem}>
+                        <Text style={styles.goalItemText}>{itemData.item.text}</Text>
                     </View>
                 )}>
                 </FlatList>
