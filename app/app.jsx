@@ -4,42 +4,59 @@ import GoalInput from "../components/GoalInput";
 import GoalItem from "../components/GoalItem";
 
 export default function App() {
-    const [enteredText, setEnteredText] = useState('');
-    const [courseGoals, setCourseGoals] = useState([]);
+  const [courseGoals, setCourseGoals] = useState([]);
 
-    async function addGoalHandler() {
-        if (enteredText.length > 0) {
-            await setCourseGoals(currentGoals => {
-                return [...currentGoals, { text: enteredText, id: Math.random().toString() }];
-            });
-            setEnteredText('');
-        }
+  function addGoalHandler(enteredText) {
+    if (enteredText.length > 0) {
+      setCourseGoals((currentGoals) => {
+        return [
+          ...currentGoals,
+          { text: enteredText, id: Math.random().toString() },
+        ];
+      });
     }
+  }
 
-    function goalInputHandler(enteredText) {
-        setEnteredText(enteredText);
-    }
+  function deleteGoalHandler(id) {
+    setCourseGoals((currentGoals) => {
+      return currentGoals.filter((goal) => goal.id !== id);
+    });
+  }
 
-    return <>
-        <View style={styles.container}>
-            <GoalInput enteredText={enteredText} addGoalHandler={addGoalHandler} goalInputHandler={goalInputHandler}></GoalInput>
-            <View style={styles.goalsContainer}>
-                <FlatList alwaysBounceVertical="false" keyExtractor={(item, index) => { return item.id }} data={courseGoals}
-                    renderItem={(itemData) => <GoalItem itemData={itemData} />
-                    }>
-                </FlatList>
-            </View>
+  return (
+    <>
+      <View style={styles.container}>
+        <GoalInput
+          addGoalHandler={(value) => addGoalHandler(value)}
+        ></GoalInput>
+
+        <View style={styles.goalsContainer}>
+          <FlatList
+            alwaysBounceVertical="false"
+            keyExtractor={(item, index) => {
+              return item.id;
+            }}
+            data={courseGoals}
+            renderItem={(itemData) => (
+              <GoalItem
+                itemData={itemData}
+                onDeleteItem={(id) => deleteGoalHandler(id)}
+              />
+            )}
+          ></FlatList>
         </View>
+      </View>
     </>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 50,
-        paddingHorizontal: 16
-    },
-    goalsContainer: {
-        flex: 6
-    }
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 16,
+  },
+  goalsContainer: {
+    flex: 6,
+  },
 });
